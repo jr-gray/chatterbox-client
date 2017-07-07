@@ -7,6 +7,7 @@
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -25,8 +26,37 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
-      <!-- Your HTML goes here! -->
+      <div id="roomSelect">
+        <form action="/action_page.php">
+          <select name="roomSelect" class = "differentRooms">
+            <!-- <option value="volvo">Volvo</option>
+            <option value="saab">Saab</option>
+            <option value="fiat">Fiat</option>
+            <option value="audi">Audi</option> -->
+          </select>
+          <br><br>
+          <input type="submit">
+        </form>
+
+        <form id="send">
+          <textarea name="message" rows="1" cols="50">post a chat!</textarea>
+          <br>
+          <input type="submit" class="submit">
+        </form>
+
+
+        
+    
+      </div>
+  
+      
+      <!-- <div class="message">
+        <p>Message</p>
+      </div>
+         -->
+
+      </div>
+    <div id="chats">
     </div>
-    <div id="chats"></div>
   </body>
 </html>

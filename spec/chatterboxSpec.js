@@ -74,7 +74,7 @@ describe('chatterbox', function() {
         expect($('#chats').children().length).to.equal(0);
       });
 
-      it('should be able to add messages to the DOM', function() {
+      it.only('should be able to add messages to the DOM', function() {
         var message = {
           username: 'Mel Brooks',
           text: 'Never underestimate the power of the Schwartz!',
@@ -82,7 +82,7 @@ describe('chatterbox', function() {
         };
 
         app.renderMessage(message);
-
+        
         expect($('#chats').children().length).to.equal(1);
       });
 

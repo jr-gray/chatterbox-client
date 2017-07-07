@@ -75,7 +75,7 @@ $('document').ready(function() {
 
   app.renderMessage = function(message) {
 // console.log('thisis the message ', message)
-    $('#chats').append('<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div><br>');
+    $('#chats').append('<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>');
   };
 
   app.renderRoom = function(name) {
