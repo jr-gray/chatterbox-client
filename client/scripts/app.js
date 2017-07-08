@@ -3,15 +3,16 @@ var app = {};
 $('document').ready(function() { 
   
   app.init = function() {
-    app.handleSubmit();
-    // $('#send .submit').on('click', this.handleSubmit);
-    // $('.username').on('click', this.handleUsernameClick);
+    // app.handleSubmit();
+    //app.handleUsernameClick();
+    //$('#send .submit').on('click', this.handleSubmit);
+    $('.username').on('click', this.handleUsernameClick);
   };
 
   app.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
 
   app.send = function(message) {
-    //debugger
+
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
       // url: 'http://parse.la.hackreactor.com/chatterbox/classes/messages',
@@ -41,9 +42,7 @@ $('document').ready(function() {
       success: function (data) {
         var roomsArray = [];
         
-        for (var i = data.results.length - 1; i > 0; i--) {
-          //if ($('.differentRooms').find(data.results[i].roomname)) { $(.diff)}  
-          
+        for (var i = 0; i < data.results.length; i++) {
 
           app.renderMessage(data.results[i]);
           if (!roomsArray.includes(data.results[i].roomname)) {
@@ -54,17 +53,8 @@ $('document').ready(function() {
           var currentRoom = roomsArray[rooms];
           $('.differentRooms').append('<option value="' + currentRoom + '">' + currentRoom + '</option>');
         }
-        
-        
+        app.init();
 
-        // target #roomSelect and add each room as a child
-        // console.log(data.results[data.results.length - 1]);
-        // console.log(data.results[0]);
-          
-       
-        
-
-        // something with data
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -79,25 +69,27 @@ $('document').ready(function() {
 
   app.renderMessage = function(message) {
 
-    var user = '<div></div>';
-    var txt = message.username + ' ' + message.text;
-    
-    //message.username = message.username.text(someHtmlString).html();
-    //message.text = message.text.text(someHtmlString).html();
     message.username = this.sanitizeHTML(message.username);
     message.text = this.sanitizeHTML(message.text);
-    $('#chats').append('<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>');
-    //var messageContext = '<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>';
-    
-    //$('#chats').text(.append('<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>');
+    $('#chats').append('<div class = "username"><b class="boldUser">' + '@' + message.username + '  ' + '</b>' + message.text + '</div>');
+
   };
 
   app.renderRoom = function(name) {
     $('#roomSelect').append('<span>' + name + '</span>');
   };
+  
+
+  var friends = {};
 
   app.handleUsernameClick = function() {  
-    console.log('username clicked');
+    var usrAndMessage = $(this).text();
+    var usrOnly = usrAndMessage.slice(1, usrAndMessage.indexOf(' '));
+    if (!friends[usrOnly]) {
+      friends[usrOnly] = usrOnly;
+      $('#friendsList').append('<li>' + friends[usrOnly] + '</li>');
+    }
+    
   };
 
   app.handleSubmit = function() {
@@ -125,7 +117,7 @@ $('document').ready(function() {
   app.fetch();
   //app.init();
 
-  setTimeout(app.fetch.bind(app), 5000);
+  // setTimeout(app.fetch.bind(app), 5000);
 
   $('#send .submit').on('click', app.handleSubmit);
   $('.username').on('click', app.handleUsernameClick);
