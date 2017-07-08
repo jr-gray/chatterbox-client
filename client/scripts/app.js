@@ -1,10 +1,11 @@
 var app = {};
 
 $('document').ready(function() { 
-
-
   
-  app.init = function() {};
+  app.init = function() {
+    // $('#send .submit').on('click', this.handleSubmit);
+    // $('.username').on('click', this.handleUsernameClick);
+  };
 
   app.server = 'http://parse.la.hackreactor.com/chatterbox/classes/messages';
 
@@ -12,12 +13,14 @@ $('document').ready(function() {
     //debugger
     $.ajax({
       // This is the url you should use to communicate with the parse API server.
+      // url: 'http://parse.la.hackreactor.com/chatterbox/classes/messages',
       url: 'http://parse.la.hackreactor.com/chatterbox/classes/messages',
       type: 'POST',
       data: JSON.stringify(message),
       contentType: 'application/json',
       success: function (data) {
         console.log('chatterbox: Message sent');
+        
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -32,7 +35,7 @@ $('document').ready(function() {
         // This is the url you should use to communicate with the parse API server.
       url: 'http://parse.la.hackreactor.com/chatterbox/classes/messages',
       type: 'GET',
-      //data: JSON.stringify(message),
+      data: {order: '-createdAt'},
       contentType: 'application/json',
       success: function (data) {
         var roomsArray = [];
@@ -74,7 +77,8 @@ $('document').ready(function() {
   };
 
   app.renderMessage = function(message) {
-// console.log('thisis the message ', message)
+    message.username = this.sanitizeHTML(message.username);
+    message.text = this.sanitizeHTML(message.text);
     $('#chats').append('<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>');
   };
 
@@ -87,13 +91,29 @@ $('document').ready(function() {
   };
 
   app.handleSubmit = function() {
-    //this.send(message);
+    // $('.submit').submit(function(e) {
+    //   alert($(this).val());
+    // });
+    var message = {};
+    message.username = window.location.search.substring(10);
+    message.roomname = 'lobby';
+    app.send(message);
+    //app.fetch()
+    return false;
+    
+  };
+
+  app.sanitizeHTML = function(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
   };
 
   app.fetch();
-  app.init();
-  // $('.username').on('click', app.handleUsernameClick);
-  // $('#send .submit').on('click', this.handleSubmit);
+  //app.init();
+
+  setTimeout(app.fetch.bind(app), 5000);
+
+  $('#send .submit').on('click', app.handleSubmit);
+  $('.username').on('click', app.handleUsernameClick);
    
 });
 
