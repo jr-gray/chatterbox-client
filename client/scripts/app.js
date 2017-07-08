@@ -3,6 +3,7 @@ var app = {};
 $('document').ready(function() { 
   
   app.init = function() {
+    app.handleSubmit();
     // $('#send .submit').on('click', this.handleSubmit);
     // $('.username').on('click', this.handleUsernameClick);
   };
@@ -57,8 +58,8 @@ $('document').ready(function() {
         
 
         // target #roomSelect and add each room as a child
-        console.log(data.results[data.results.length - 1]);
-        console.log(data.results[0]);
+        // console.log(data.results[data.results.length - 1]);
+        // console.log(data.results[0]);
           
        
         
@@ -77,9 +78,18 @@ $('document').ready(function() {
   };
 
   app.renderMessage = function(message) {
+
+    var user = '<div></div>';
+    var txt = message.username + ' ' + message.text;
+    
+    //message.username = message.username.text(someHtmlString).html();
+    //message.text = message.text.text(someHtmlString).html();
     message.username = this.sanitizeHTML(message.username);
     message.text = this.sanitizeHTML(message.text);
     $('#chats').append('<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>');
+    //var messageContext = '<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>';
+    
+    //$('#chats').text(.append('<div class = "username"><b>' + '@' + message.username + '  ' + '</b>' + message.text + '</div>');
   };
 
   app.renderRoom = function(name) {
@@ -95,7 +105,9 @@ $('document').ready(function() {
     //   alert($(this).val());
     // });
     var message = {};
-    message.username = window.location.search.substring(10);
+    message.username = window.location.search.substring(window.location.search.indexOf('=') + 1);
+    // console.log(message.username);
+    message.text = $('#sendMessage').val();
     message.roomname = 'lobby';
     app.send(message);
     //app.fetch()
@@ -104,8 +116,11 @@ $('document').ready(function() {
   };
 
   app.sanitizeHTML = function(s) {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    if (s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    }
   };
+  
 
   app.fetch();
   //app.init();
